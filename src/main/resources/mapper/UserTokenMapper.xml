@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.UserTokenMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.demo.entity.UserToken">
+            <id property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="token" column="token" jdbcType="VARCHAR"/>
+            <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+            <result property="expiredTime" column="expired_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id,token,updated_time,
+        expired_time
+    </sql>
+    <insert id="insertSelective">
+        insert into user_token
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="token != null">token,</if>
+            <if test="updatedTime != null">updated_time,</if>
+            <if test="expiredTime != null">expired_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId,jdbcType=BIGINT},</if>
+            <if test="token != null">#{token,jdbcType=VARCHAR},</if>
+            <if test="updatedTime != null">#{updatedTime,jdbcType=TIMESTAMP},</if>
+            <if test="expiredTime != null">#{expiredTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_token
+        where
+        user_id = #{userId,jdbcType=NUMERIC}
+    </select>
+    <select id="selectByToken" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_token
+        where
+        token = #{token,jdbcType=VARCHAR}
+    </select>
+    <update id="updateByUserId">
+        update user_token
+        set where
+                user_id = #{userId,jdbcType=NUMERIC}
+    </update>
+</mapper>
